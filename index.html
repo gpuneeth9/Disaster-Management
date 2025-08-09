@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>From The Grounds Up - Crowd Sourced Disaster Management</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="time.js" defer></script>
+    <style>
+      
+        .card {
+            background: var(--secondary-bg);
+            padding: 2rem;
+            margin: 1rem;
+            border-radius: var(--radius);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 300px;
+        }
+
+        .card h3 {
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            color: #333;
+            width: 100%;
+        }
+
+        .card p {
+            margin: 0 0 1rem 0;
+            line-height: 1.5;
+            color: #444;
+            text-align: justify;
+            white-space: normal;
+            word-wrap: break-word;
+            width: 100%;
+        }
+
+        .card .button {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            margin-top: auto;
+            font-weight: 500;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            text-decoration: none;
+            transition: background-color var(--transition);
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Enhanced Responsive Slideshow styles */
+        .slideshow-container {
+            max-width: 100%;
+            position: relative;
+            margin: 0 auto 2rem auto;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            aspect-ratio: 16/9;
+            background: #000;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .slide-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            font-size: clamp(0.875rem, 2vw, 1.1rem);
+        }
+
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: auto;
+            padding: clamp(0.5rem, 2vw, 1rem);
+            color: white;
+            font-weight: bold;
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            transition: 0.6s ease;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+            background: rgba(0, 0, 0, 0.6);
+            border: none;
+            z-index: 2;
+        }
+
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .prev {
+            left: 0;
+        }
+
+        .prev:hover, .next:hover {
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .dot-container {
+            text-align: center;
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 2rem;
+            margin: 0.5rem auto;
+            display: inline-flex;
+            gap: 0.5rem;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .dot {
+            height: clamp(8px, 1.5vw, 12px);
+            width: clamp(8px, 1.5vw, 12px);
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            transition:  0.6s ease;
+            cursor: pointer;
+        }
+
+        .active-dot, .dot:hover {
+            background-color: #717171;
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .slideshow-container {
+                margin: 1rem auto;
+                aspect-ratio: 4/3;
+            }
+
+            .slide-caption {
+                padding: 0.5rem;
+            }
+
+            .prev, .next {
+                padding: 0.5rem;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .card {
+                margin: 0.5rem;
+                width: 100%;
+            }
+
+            .header-title h1 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-logo">
+            <img src="logo.png" alt="From The Grounds Up Logo">
+        </div>
+        <div class="header-title">
+            <h1>Disaster Management</h1>
+        </div>
+        <div class="time-display"></div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="struct.html">Medical Aid</a></li>
+            <li><a href="transportaid.html">Transport Aid</a></li>
+            <li><a href="bla.html">Volunteer</a></li>
+            <li><a href="live-reports.html">Live Reports</a></li>
+            <li><a href="weather.html">Weather</a></li>
+            <li><a href="hmpv-updates.html">HMPV Updates</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- Slideshow Section -->
+        <div class="slideshow-container">
+            <div class="slide fade">
+                <img src="imgs/what-is-disaster-management.jpeg" alt="Disaster Management Overview">
+                <div class="slide-caption">Comprehensive Disaster Management Approach</div>
+            </div>
+            <div class="slide fade">
+                <img src="imgs/60dace90-6ccf-443b-a394-57ef5da1bb71_1920x1080.jpg" alt="Emergency Response">
+                <div class="slide-caption">Emergency Response Teams in Action</div>
+            </div>
+            <div class="slide fade">
+                <img src="imgs/dc-Cover-163423fuvh6oqrv9ack51jfb62-20160925151050.Medi.jpeg" alt="Rescue Operations">
+                <div class="slide-caption">Rescue Operations During Natural Disasters</div>
+            </div>
+            <div class="slide fade">
+                <img src="imgs/0289805_0289805_mange.jpg" alt="Disaster Preparedness">
+                <div class="slide-caption">Disaster Preparedness and Planning</div>
+            </div>
+            <div class="slide fade">
+                <img src="imgs/R.jpg" alt="Community Response">
+                <div class="slide-caption">Community-Based Disaster Response</div>
+            </div>
+            <button class="prev" onclick="changeSlide(-1)" aria-label="Previous slide">❮</button>
+            <button class="next" onclick="changeSlide(1)" aria-label="Next slide">❯</button>
+        </div>
+        <div class="dot-container">
+            <span class="dot" onclick="currentSlide(1)" role="button" aria-label="Slide 1"></span>
+            <span class="dot" onclick="currentSlide(2)" role="button" aria-label="Slide 2"></span>
+            <span class="dot" onclick="currentSlide(3)" role="button" aria-label="Slide 3"></span>
+            <span class="dot" onclick="currentSlide(4)" role="button" aria-label="Slide 4"></span>
+            <span class="dot" onclick="currentSlide(5)" role="button" aria-label="Slide 5"></span>
+        </div>
+
+        <section class="information">
+            <h2>Empowering Communities Through Crowd-Sourced Disaster Management</h2>
+            <div class="card">
+                <p>
+                    Our platform revolutionizes disaster response by harnessing the collective power of communities. We create a seamless connection between those in need and those who can help, enabling faster and more effective disaster management. Through our integrated approach, we combine real-time updates, resource pooling, and direct communication channels to create a comprehensive emergency response system.
+                </p>
+                <p>
+                    During emergencies, when professional responders might be overwhelmed, our crowd-sourced platform enables communities to mobilize quickly and effectively. By leveraging local knowledge and resources, we ensure that help reaches those who need it most, when they need it most.
+                </p>
+            </div>
+            
+            <div class="grid-container">
+                <div class="card">
+                    <h3>Medical Aid</h3>
+                    <p>Access immediate medical assistance and connect with healthcare professionals in your area. Our network ensures quick response times and efficient resource allocation during emergencies.</p>
+                    <a href="struct.html" class="button">Request Medical Aid</a>
+                </div>
+                <div class="card">
+                    <h3>Transport Aid</h3>
+                    <p>Find or offer emergency transportation services. Our coordination system matches those in need with available vehicles and drivers to facilitate quick evacuations and supply delivery.</p>
+                    <a href="transportaid.html" class="button">Transport Services</a>
+                </div>
+                <div class="card">
+                    <h3>Volunteer</h3>
+                    <p>Join our growing network of community volunteers. Your skills and resources can make a crucial difference in emergency situations, helping to save lives and support recovery efforts.</p>
+                    <a href="bla.html" class="button">Volunteer Now</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="weatherwidget-container">
+            <h2>Weather Updates</h2>
+            <div class="weatherwidget-container">
+                <a class="weatherwidget-io" href="https://forecast7.com/en/17d3978d49/hyderabad/" 
+                   data-label_1="HYDERABAD" data-label_2="WEATHER" 
+                   data-theme="original">HYDERABAD WEATHER</a>
+                <script>
+                !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+                </script>
+            </div>
+        </section>
+
+        <footer class="card">
+            <p> 2025 From The Grounds Up - Crowd Sourced Disaster Management</p>
+        </footer>
+    </main>
+
+    <script src="scripts.js"></script>
+    
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
+    <!-- Sweet Alert for notifications -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- Twilio SDK -->
+    <script src="https://media.twiliocdn.com/sdk/js/client/v1.14.0/twilio.min.js"></script>
+    
+    <!-- Form Handler -->
+    <script src="form-handler.js"></script>
+</body>
+</html>

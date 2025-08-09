@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer - From The Grounds Up</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-size: cover;
+            color: #333;
+        }
+        .quote-section {
+            width: 100%;
+            height: 30vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: rgba(209, 231, 221, 0.8);
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .quote-section p {
+            font-size: 36px;
+            line-height: 1.5;
+            color: #0c5460;
+            font-family: 'Dancing Script', cursive;
+            font-weight: bold;
+            margin: 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px; 
+        }
+        .form-group {
+            flex: 1 1 calc(50% - 20px);
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #495057;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            width: 100%;
+            padding: 15px 20px;
+            margin-top: 30px;
+            background-color: #28a745;
+            border: .2rem solid rgb(11, 189, 11);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+        button:hover {
+            background-color: #218838;
+        }
+
+        .invalid-input {
+            border-color: #dc3545 !important;
+            background-color: #fff8f8;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .quote-section p {
+                font-size: 28px;
+            }
+            .form-group {
+                flex: 1 1 80%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .quote-section {
+                height: 25vh;
+            }
+            .quote-section p {
+                font-size: 24px;
+            }
+            .container {
+                padding: 20px;
+            }
+            button {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-logo">
+            <img src="logo.png" alt="From The Grounds Up Logo">
+        </div>
+        <div class="header-title">
+            <h1>Volunteer Registration</h1>
+        </div>
+        <div class="time-display"></div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="struct.html">Medical Aid</a></li>
+            <li><a href="transportaid.html">Transport Aid</a></li>
+            <li><a href="bla.html">Volunteer</a></li>
+            <li><a href="live-reports.html">Live Reports</a></li>
+            <li><a href="weather.html">Weather</a></li>
+            <li><a href="hmpv-updates.html">HMPV Updates</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="form-container">
+            <h2>Register as a Volunteer</h2>
+            <form action="/volunteering" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                    <div class="error-message" id="name-error">Please enter a valid name (2-50 characters, letters only)</div>
+                </div>
+                <div class="form-group">
+                    <label for="location">Location:</label>
+                    <input type="text" id="location" name="location" required>
+                    <div class="error-message" id="location-error">Please enter a valid location (5-100 characters)</div>
+                </div>
+                <div class="form-group">
+                    <label for="contactNumber">Contact Number:</label>
+                    <input type="tel" id="contactNumber" name="contactNumber" required>
+                    <div class="error-message" id="contactNumber-error">Please enter a valid 10-digit phone number</div>
+                </div>
+                <div class="form-group">
+                    <label for="disaster-type">Disaster Type:</label>
+                    <select id="disaster-type" name="disastertype" required>
+                        <option value="earthquake">Earthquake</option>
+                        <option value="flood">Flood</option>
+                        <option value="fire">Fire</option>
+                        <option value="hurricane">Hurricane</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="num-people">Number of People Around You:</label>
+                    <input type="number" id="num-people" name="numpeople" required>
+                    <div class="error-message" id="numpeople-error">Please enter a valid number of people</div>
+                </div>
+                <div class="form-group">
+                    <label for="severity">Severity:</label>
+                    <select id="severity" name="severity" required>
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+                <button type="submit" class="button">Submit</button>
+            </form>
+        </div>
+
+        <section class="card">
+            <h2>Active Volunteer Requests</h2>
+            <div id="volunteerRequestsList" class="grid-container">
+                <!-- Requests will be populated here -->
+            </div>
+        </section>
+    </main>
+
+    <footer class="card">
+        <p> 2024 From The Grounds Up - Crowd Sourced Disaster Management</p>
+    </footer>
+
+    <script src="scripts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="form-handler.js"></script>
+    <script>
+        // Form validation
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form[action="/volunteering"]');
+            const inputs = form.querySelectorAll('input, select');
+
+            // Validation patterns
+            const patterns = {
+                name: /^[a-zA-Z\s]{2,50}$/,
+                contactNumber: /^[0-9]{10}$/,
+                numpeople: /^[1-9][0-9]*$/,
+                location: /^[a-zA-Z0-9\s,.-]{5,100}$/
+            };
+
+            // Error messages
+            const errorMessages = {
+                name: 'Please enter a valid name (2-50 characters, letters only)',
+                contactNumber: 'Please enter a valid 10-digit phone number',
+                numpeople: 'Please enter a valid number of people',
+                location: 'Please enter a valid location (5-100 characters)'
+            };
+
+            // Validate on input
+            inputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    validateInput(this);
+                });
+            });
+
+            // Validate single input
+            function validateInput(input) {
+                const pattern = patterns[input.name];
+                const errorElement = document.getElementById(`${input.name}-error`);
+                
+                if (!pattern || !errorElement) return true;
+
+                const isValid = pattern.test(input.value);
+                
+                if (!isValid) {
+                    input.classList.add('invalid-input');
+                    errorElement.style.display = 'block';
+                    
+                    // Show SweetAlert2 notification for phone number
+                    if (input.name === 'contactNumber' && input.value.length > 0) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Invalid Phone Number',
+                            text: 'Please enter a valid 10-digit phone number',
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true
+                        });
+                    }
+                } else {
+                    input.classList.remove('invalid-input');
+                    errorElement.style.display = 'none';
+                }
+                
+                return isValid;
+            }
+
+            // Validate on submit
+            form.addEventListener('submit', function(e) {
+                let isValid = true;
+                
+                inputs.forEach(input => {
+                    if (patterns[input.name]) {
+                        if (!validateInput(input)) {
+                            isValid = false;
+                        }
+                    }
+                });
+
+                if (!isValid) {
+                    e.preventDefault();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Form Error',
+                        text: 'Please correct the highlighted fields before submitting',
+                        confirmButtonColor: '#dc3545'
+                    });
+                }
+            });
+        });
+
+        // Check if the URL contains 'status=success' and display an alert
+        if (new URLSearchParams(window.location.search).get('status') === 'success') {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: 'Volunteer successfully Registered!',
+                confirmButtonColor: '#28a745'
+            });
+        }
+    </script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/twilio/4.20.0/twilio.min.js"></script>
+</body>
+</html>

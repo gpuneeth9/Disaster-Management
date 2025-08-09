@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HMPV Virus Updates - From The Grounds Up</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        .hmpv-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: var(--secondary-bg);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #007bff;
+            margin: 0.5rem 0;
+        }
+
+        .updates-list {
+            margin-top: 2rem;
+        }
+
+        .update-item {
+            background: var(--secondary-bg);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: var(--radius);
+            border-left: 4px solid #007bff;
+        }
+
+        .update-date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .prevention-tips {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: var(--radius);
+            margin: 2rem 0;
+        }
+
+        .prevention-tips ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .prevention-tips li {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .prevention-tips li:before {
+            content: "•";
+            color: #007bff;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-logo">
+            <img src="logo.png" alt="From The Grounds Up Logo">
+        </div>
+        <div class="header-title">
+            <h1>HMPV Virus Updates</h1>
+        </div>
+        <div class="time-display"></div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="struct.html">Medical Aid</a></li>
+            <li><a href="transportaid.html">Transport Aid</a></li>
+            <li><a href="bla.html">Volunteer</a></li>
+            <li><a href="live-reports.html">Live Reports</a></li>
+            <li><a href="weather.html">Weather</a></li>
+            <li><a href="hmpv-updates.html" class="active">HMPV Updates</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section class="card">
+            <h2>Current HMPV Situation in India</h2>
+            <div class="hmpv-stats">
+                <div class="stat-card">
+                    <h3>Active Cases</h3>
+                    <div class="stat-number" id="active-cases">Loading...</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Recovered</h3>
+                    <div class="stat-number" id="recovered">Loading...</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Under Treatment</h3>
+                    <div class="stat-number" id="under-treatment">Loading...</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Latest Updates</h2>
+            <div class="updates-list" id="updates-container">
+                <!-- Updates will be dynamically populated -->
+            </div>
+        </section>
+
+        <section class="prevention-tips card">
+            <h2>Prevention Guidelines</h2>
+            <ul>
+                <li>Wash your hands frequently with soap and water</li>
+                <li>Wear a mask in crowded places</li>
+                <li>Maintain social distancing</li>
+                <li>Cover your mouth and nose when coughing or sneezing</li>
+                <li>Stay home if you feel unwell</li>
+                <li>Keep rooms well-ventilated</li>
+                <li>Clean and disinfect frequently touched surfaces</li>
+            </ul>
+        </section>
+
+        <section class="card">
+            <h2>Emergency Contacts</h2>
+            <p>National HMPV Helpline: 1800-XXX-XXXX</p>
+            <p>State Health Department: XXXX-XXXXXX</p>
+            <p>Local Medical Emergency: 108</p>
+        </section>
+    </main>
+
+    <footer class="card">
+        <p> 2025 From The Grounds Up - Crowd Sourced Disaster Management</p>
+    </footer>
+
+    <script src="scripts.js"></script>
+    <script>
+        // Simulated data - Replace with actual API calls in production
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update statistics
+            document.getElementById('active-cases').textContent = '2,534';
+            document.getElementById('recovered').textContent = '15,789';
+            document.getElementById('under-treatment').textContent = '1,245';
+
+            // Sample updates
+            const updates = [
+                {
+                    date: '2025-01-17',
+                    content: 'New HMPV variant detected in metropolitan areas. Health authorities on high alert.'
+                },
+                {
+                    date: '2025-01-16',
+                    content: 'Government announces additional funding for HMPV research and treatment facilities.'
+                },
+                {
+                    date: '2025-01-15',
+                    content: 'Updated guidelines released for HMPV prevention in schools and workplaces.'
+                }
+            ];
+
+            const updatesContainer = document.getElementById('updates-container');
+            updates.forEach(update => {
+                const updateElement = document.createElement('div');
+                updateElement.className = 'update-item';
+                updateElement.innerHTML = `
+                    <div class="update-date">${update.date}</div>
+                    <div class="update-content">${update.content}</div>
+                `;
+                updatesContainer.appendChild(updateElement);
+            });
+        });
+    </script>
+</body>
+</html>

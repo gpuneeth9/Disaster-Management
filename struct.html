@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Aid - From The Grounds Up</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="time.js" defer></script>
+    <style>
+        .invalid-input {
+            border-color: #dc3545 !important;
+            background-color: #fff8f8;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+        
+        .request-card {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+        }
+
+        .request-card h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .request-card p {
+            margin: 0.5rem 0;
+            color: #666;
+        }
+
+        .request-card strong {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-logo">
+            <img src="logo.png" alt="From The Grounds Up Logo">
+        </div>
+        <div class="header-title">
+            <h1>Medical Aid Request</h1>
+        </div>
+        <div class="time-display"></div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="struct.html">Medical Aid</a></li>
+            <li><a href="transportaid.html">Transport Aid</a></li>
+            <li><a href="bla.html">Volunteer</a></li>
+            <li><a href="live-reports.html">Live Reports</a></li>
+            <li><a href="weather.html">Weather</a></li>
+            <li><a href="hmpv-updates.html">HMPV Updates</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="form-container">
+            <h2>Request Medical Assistance</h2>
+            <form id="medicalAidForm">
+                <div class="form-group">
+                    <label for="patientName">Patient Name</label>
+                    <input type="text" id="patientName" name="patientName" required>
+                    <div class="error-message" id="patientName-error">Please enter a valid name (2-50 characters, letters only)</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="condition">Medical Condition</label>
+                    <textarea id="condition" name="condition" required></textarea>
+                    <div class="error-message" id="condition-error">Please describe the medical condition (minimum 10 characters)</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" name="location" required>
+                    <div class="error-message" id="location-error">Please enter a valid location (5-100 characters)</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="contactNumber">Contact Number</label>
+                    <input type="tel" id="contactNumber" name="contactNumber" required>
+                    <div class="error-message" id="contactNumber-error">Please enter a valid 10-digit phone number</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="urgency">Urgency Level</label>
+                    <select id="urgency" name="urgency" required>
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                        <option value="critical">Critical</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="additionalInfo">Additional Information</label>
+                    <textarea id="additionalInfo" name="additionalInfo"></textarea>
+                </div>
+                
+                <button type="submit" class="button">Submit Request</button>
+            </form>
+        </div>
+
+        <section class="card">
+            <h2>Active Medical Aid Requests</h2>
+            <div id="medicalRequestsList" class="grid-container">
+                <!-- Requests will be populated here -->
+            </div>
+        </section>
+    </main>
+
+    <footer class="card">
+        <p> 2025 From The Grounds Up - Crowd Sourced Disaster Management</p>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script src="aid-requests.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="form-handler.js"></script>
+    <script>
+        // Form validation
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('medicalAidForm');
+            const inputs = form.querySelectorAll('input, select, textarea');
+
+            // Validation patterns
+            const patterns = {
+                patientName: /^[a-zA-Z\s]{2,50}$/,
+                contactNumber: /^[0-9]{10}$/,
+                location: /^[a-zA-Z0-9\s,.-]{5,100}$/,
+                condition: /^[\s\S]{10,500}$/ // At least 10 characters for medical condition
+            };
+
+            // Error messages
+            const errorMessages = {
+                patientName: 'Please enter a valid name (2-50 characters, letters only)',
+                contactNumber: 'Please enter a valid 10-digit phone number',
+                location: 'Please enter a valid location (5-100 characters)',
+                condition: 'Please describe the medical condition (minimum 10 characters)'
+            };
+
+            // Validate on input
+            inputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    validateInput(this);
+                });
+            });
+
+            // Validate single input
+            function validateInput(input) {
+                const pattern = patterns[input.name];
+                const errorElement = document.getElementById(`${input.name}-error`);
+                
+                if (!pattern || !errorElement) return true;
+
+                const isValid = pattern.test(input.value);
+                
+                if (!isValid) {
+                    input.classList.add('invalid-input');
+                    errorElement.style.display = 'block';
+                    
+                    // Show SweetAlert2 notification for phone number
+                    if (input.name === 'contactNumber' && input.value.length > 0) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Invalid Phone Number',
+                            text: 'Please enter a valid 10-digit phone number',
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true
+                        });
+                    }
+                } else {
+                    input.classList.remove('invalid-input');
+                    errorElement.style.display = 'none';
+                }
+                
+                return isValid;
+            }
+
+            // Validate on submit
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                let isValid = true;
+                
+                inputs.forEach(input => {
+                    if (patterns[input.name]) {
+                        if (!validateInput(input)) {
+                            isValid = false;
+                        }
+                    }
+                });
+
+                if (!isValid) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Form Error',
+                        text: 'Please correct the highlighted fields before submitting',
+                        confirmButtonColor: '#dc3545'
+                    });
+                    return;
+                }
+
+                try {
+                    // Get form data
+                    const formData = new FormData(form);
+                    
+                    // Send to backend server
+                    const response = await fetch('http://localhost:3001/api/medical-aid', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        // Don't show alert here, it will be shown by form-handler.js
+                        form.reset();
+                        loadMedicalRequests(); // Reload the requests list
+                    } else {
+                        throw new Error(result.message || 'Error submitting form');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    // Only show error alert here
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Submission Error',
+                        text: 'There was an error saving your request. Please try again.',
+                        confirmButtonColor: '#dc3545'
+                    });
+                }
+            });
+        });
+    </script>
+    <script>
+        async function loadMedicalRequests() {
+            try {
+                const response = await fetch('http://localhost:3001/api/medical-aid');
+                const requests = await response.json();
+                
+                const requestsList = document.getElementById('medicalRequestsList');
+                requestsList.innerHTML = '';
+                
+                requests.forEach(request => {
+                    const requestCard = document.createElement('div');
+                    requestCard.className = 'request-card';
+                    requestCard.innerHTML = `
+                        <h3>Patient: ${request.patientName}</h3>
+                        <p><strong>Condition:</strong> ${request.condition}</p>
+                        <p><strong>Location:</strong> ${request.location}</p>
+                        <p><strong>Contact:</strong> ${request.contactNumber}</p>
+                        <p><strong>Urgency:</strong> ${request.urgency}</p>
+                        <p><strong>Additional Info:</strong> ${request.additionalInfo || 'None'}</p>
+                        <p><strong>Submitted:</strong> ${new Date(request.createdAt).toLocaleString()}</p>
+                    `;
+                    requestsList.appendChild(requestCard);
+                });
+            } catch (error) {
+                console.error('Error loading requests:', error);
+            }
+        }
+
+        // Load requests when page loads
+        document.addEventListener('DOMContentLoaded', loadMedicalRequests);
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twilio/4.20.0/twilio.min.js"></script>
+</body>
+</html>

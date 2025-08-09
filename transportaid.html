@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transport Aid - From The Grounds Up</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="time.js" defer></script>
+    <style>
+        .invalid-input {
+            border-color: #dc3545 !important;
+            background-color: #fff8f8;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-logo">
+            <img src="logo.png" alt="From The Grounds Up Logo">
+        </div>
+        <div class="header-title">
+            <h1>Transport Aid Request</h1>
+        </div>
+        <div class="time-display"></div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="struct.html">Medical Aid</a></li>
+            <li><a href="transportaid.html">Transport Aid</a></li>
+            <li><a href="bla.html">Volunteer</a></li>
+            <li><a href="live-reports.html">Live Reports</a></li>
+            <li><a href="weather.html">Weather</a></li>
+            <li><a href="hmpv-updates.html">HMPV Updates</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="form-container">
+            <h2>Request Transportation Assistance</h2>
+            <form id="transportAidForm">
+                <div class="form-group">
+                    <label for="requestType">Request Type</label>
+                    <select id="requestType" name="requestType" required>
+                        <option value="evacuation">Evacuation</option>
+                        <option value="medical-transport">Medical Transport</option>
+                        <option value="supply-delivery">Supply Delivery</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="pickupLocation">Pickup Location</label>
+                    <input type="text" id="pickupLocation" name="pickupLocation" required>
+                    <div class="error-message" id="pickupLocation-error">Please enter a valid pickup location (5-100 characters)</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="dropLocation">Drop Location</label>
+                    <input type="text" id="dropLocation" name="dropLocation" required>
+                    <div class="error-message" id="dropLocation-error">Please enter a valid drop location (5-100 characters)</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="contactNumber">Contact Number</label>
+                    <input type="tel" id="contactNumber" name="contactNumber" required>
+                    <div class="error-message" id="contactNumber-error">Please enter a valid 10-digit phone number</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="numberOfPeople">Number of People</label>
+                    <input type="number" id="numberOfPeople" name="numberOfPeople" min="1" required>
+                    <div class="error-message" id="numberOfPeople-error">Please enter a valid number of people</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="urgency">Urgency Level</label>
+                    <select id="urgency" name="urgency" required>
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                        <option value="critical">Critical</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="additionalInfo">Additional Information</label>
+                    <textarea id="additionalInfo" name="additionalInfo"></textarea>
+                </div>
+                
+                <button type="submit" class="button">Submit Request</button>
+            </form>
+        </div>
+
+        <section class="card">
+            <h2>Active Transport Aid Requests</h2>
+            <div id="transportRequestsList" class="grid-container">
+                <!-- Requests will be populated here -->
+            </div>
+        </section>
+    </main>
+
+    <footer class="card">
+        <p> 2025 From The Grounds Up - Crowd Sourced Disaster Management</p>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script src="aid-requests.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="form-handler.js"></script>
+    <script>
+        // Form validation
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('transportAidForm');
+            const inputs = form.querySelectorAll('input, select, textarea');
+
+            // Validation patterns
+            const patterns = {
+                pickupLocation: /^[a-zA-Z0-9\s,.-]{5,100}$/,
+                dropLocation: /^[a-zA-Z0-9\s,.-]{5,100}$/,
+                contactNumber: /^[0-9]{10}$/,
+                numberOfPeople: /^[1-9][0-9]*$/
+            };
+
+            // Error messages
+            const errorMessages = {
+                pickupLocation: 'Please enter a valid pickup location (5-100 characters)',
+                dropLocation: 'Please enter a valid drop location (5-100 characters)',
+                contactNumber: 'Please enter a valid 10-digit phone number',
+                numberOfPeople: 'Please enter a valid number of people'
+            };
+
+            // Add error message elements
+            inputs.forEach(input => {
+                if (patterns[input.name]) {
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'error-message';
+                    errorDiv.id = `${input.name}-error`;
+                    errorDiv.textContent = errorMessages[input.name];
+                    input.parentNode.appendChild(errorDiv);
+                }
+            });
+
+            // Validate on input
+            inputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    validateInput(this);
+                });
+            });
+
+            // Validate single input
+            function validateInput(input) {
+                const pattern = patterns[input.name];
+                const errorElement = document.getElementById(`${input.name}-error`);
+                
+                if (!pattern || !errorElement) return true;
+
+                const isValid = pattern.test(input.value);
+                
+                if (!isValid) {
+                    input.classList.add('invalid-input');
+                    errorElement.style.display = 'block';
+                    
+                    // Show SweetAlert2 notification for phone number
+                    if (input.name === 'contactNumber' && input.value.length > 0) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Invalid Phone Number',
+                            text: 'Please enter a valid 10-digit phone number',
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true
+                        });
+                    }
+                } else {
+                    input.classList.remove('invalid-input');
+                    errorElement.style.display = 'none';
+                }
+                
+                return isValid;
+            }
+
+            // Validate on submit
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                let isValid = true;
+                
+                inputs.forEach(input => {
+                    if (patterns[input.name]) {
+                        if (!validateInput(input)) {
+                            isValid = false;
+                        }
+                    }
+                });
+
+                if (!isValid) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Form Error',
+                        text: 'Please correct the highlighted fields before submitting',
+                        confirmButtonColor: '#dc3545'
+                    });
+                    return;
+                }
+
+                try {
+                    // Get form data
+                    const formData = new FormData(form);
+                    
+                    // Send to backend server
+                    const response = await fetch('http://localhost:3001/api/transport-aid', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        form.reset();
+                        loadTransportRequests(); // Reload the list
+                    } else {
+                        throw new Error(result.message || 'Error submitting form');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Submission Error',
+                        text: 'There was an error saving your request. Please try again.',
+                        confirmButtonColor: '#dc3545'
+                    });
+                }
+            });
+        });
+
+        // Function to load and display transport requests
+        async function loadTransportRequests() {
+            try {
+                const response = await fetch('http://localhost:3001/api/transport-aid');
+                const requests = await response.json();
+                
+                const requestsList = document.getElementById('transportRequestsList');
+                requestsList.innerHTML = '';
+                
+                requests.forEach(request => {
+                    const requestCard = document.createElement('div');
+                    requestCard.className = 'request-card';
+                    requestCard.innerHTML = `
+                        <h3>Transport Request: ${request.requestType}</h3>
+                        <p><strong>From:</strong> ${request.pickupLocation}</p>
+                        <p><strong>To:</strong> ${request.dropLocation}</p>
+                        <p><strong>Contact:</strong> ${request.contactNumber}</p>
+                        <p><strong>People:</strong> ${request.numberOfPeople}</p>
+                        <p><strong>Urgency:</strong> ${request.urgency}</p>
+                        <p><strong>Additional Info:</strong> ${request.additionalInfo || 'None'}</p>
+                        <p><strong>Submitted:</strong> ${new Date(request.createdAt).toLocaleString()}</p>
+                    `;
+                    requestsList.appendChild(requestCard);
+                });
+            } catch (error) {
+                console.error('Error loading requests:', error);
+            }
+        }
+
+        // Load requests when page loads
+        document.addEventListener('DOMContentLoaded', loadTransportRequests);
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twilio/4.20.0/twilio.min.js"></script>
+</body>
+</html>

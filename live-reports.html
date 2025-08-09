@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Disaster Reports - From The Grounds Up</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #e53935;
+            --secondary-color: #ff5252;
+            --background: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-primary: #212121;
+            --text-secondary: #757575;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            margin: 0;
+            padding: 20px;
+            color: var(--text-primary);
+        }
+
+        .dashboard {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .header {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: var(--radius);
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .live-feed {
+            grid-column: 1 / -1;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: var(--radius);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .news-updates {
+            grid-column: 1 / -1;
+        }
+
+        .news-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-left: 4px solid var(--primary-color);
+            background: rgba(229, 57, 53, 0.1);
+            margin-bottom: 1rem;
+            border-radius: 0 var(--radius) var(--radius) 0;
+        }
+
+        .news-item i {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        .news-meta {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .disaster-map {
+            grid-column: 1 / -1;
+            height: 400px;
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .emergency-contacts {
+            background: linear-gradient(135deg, #43a047, #1b5e20);
+            color: white;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .contact-item i {
+            font-size: 1.5rem;
+        }
+
+        .live-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #4caf50;
+            font-weight: 500;
+        }
+
+        .live-dot {
+            width: 10px;
+            height: 10px;
+            background-color: #4caf50;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .disaster-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(229, 57, 53, 0.1);
+            border-radius: var(--radius);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .disaster-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="struct.html">Medical Aid</a></li>
+            <li><a href="transportaid.html">Transport Aid</a></li>
+            <li><a href="bla.html">Volunteer</a></li>
+            <li><a href="live-reports.html">Live Reports</a></li>
+            <li><a href="weather.html">Weather</a></li>
+            <li><a href="hmpv-updates.html">HMPV Updates</a></li>
+        </ul>
+    </nav>
+    <div class="dashboard">
+        <header class="header">
+            <h1>Live Disaster Reports</h1>
+            <div class="live-status">
+                <div class="live-dot"></div>
+                Live Updates
+            </div>
+        </header>
+
+        <section class="card live-feed">
+            <h2>Live Coverage</h2>
+            <div class="video-container">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/II_m28Bm-iM?si=sipwQvRHaT8muMN6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Disaster Statistics</h2>
+            <div class="disaster-stats">
+                <div class="stat-item">
+                    <h3>Active Incidents</h3>
+                    <div class="stat-value">12</div>
+                </div>
+                <div class="stat-item">
+                    <h3>Areas Affected</h3>
+                    <div class="stat-value">8</div>
+                </div>
+                <div class="stat-item">
+                    <h3>Response Teams</h3>
+                    <div class="stat-value">24</div>
+                </div>
+                <div class="stat-item">
+                    <h3>Evacuated</h3>
+                    <div class="stat-value">1.2K</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="card news-updates">
+            <h2>Latest Updates</h2>
+            <div class="news-item">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>
+                    <div class="news-meta">2 minutes ago</div>
+                    <h3>Flash Flood Warning</h3>
+                    <p>Heavy rainfall causing flash floods in coastal regions. Emergency teams deployed.</p>
+                </div>
+            </div>
+            <div class="news-item">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <div class="news-meta">15 minutes ago</div>
+                    <h3>Evacuation Update</h3>
+                    <p>Successful evacuation completed in affected areas. Relief camps operational.</p>
+                </div>
+            </div>
+            <div class="news-item">
+                <i class="fas fa-medkit"></i>
+                <div>
+                    <div class="news-meta">1 hour ago</div>
+                    <h3>Medical Assistance</h3>
+                    <p>Medical teams providing emergency care at relief camps.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="card disaster-map">
+            <h2>Disaster Monitoring Map</h2>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/II_m28Bm-iM?si=sipwQvRHaT8muMN6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+           
+        </section>
+
+        <section class="card emergency-contacts">
+            <h2>Emergency Contacts</h2>
+            <div class="contact-item">
+                <i class="fas fa-phone-alt"></i>
+                <div>
+                    <h3>National Emergency</h3>
+                    <p>112</p>
+                </div>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-ambulance"></i>
+                <div>
+                    <h3>Medical Emergency</h3>
+                    <p>108</p>
+                </div>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-fire-extinguisher"></i>
+                <div>
+                    <h3>Fire Emergency</h3>
+                    <p>101</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Function to update timestamp for news items
+        function updateTimestamps() {
+            const newsItems = document.querySelectorAll('.news-meta');
+            const now = new Date();
+            
+            newsItems.forEach((item, index) => {
+                const minutes = index * 15 + 2;
+                const time = new Date(now - minutes * 60000);
+                const diff = Math.floor((now - time) / 60000);
+                
+                if (diff < 60) {
+                    item.textContent = `${diff} minutes ago`;
+                } else {
+                    const hours = Math.floor(diff / 60);
+                    item.textContent = `${hours} hour${hours > 1 ? 's' : ''} ago`;
+                }
+            });
+        }
+
+        // Update timestamps every minute
+        setInterval(updateTimestamps, 60000);
+        updateTimestamps();
+    </script>
+</body>
+</html>
